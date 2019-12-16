@@ -1,0 +1,1 @@
+POST        /tours        controllers.RestController.tours()
