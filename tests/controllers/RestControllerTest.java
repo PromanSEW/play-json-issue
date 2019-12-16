@@ -1,8 +1,10 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Tour;
 import models.TourType;
 import org.junit.Test;
+import play.libs.Json;
 import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
 import play.test.WithApplication;
@@ -23,5 +25,10 @@ public class RestControllerTest extends WithApplication {
         RequestBuilder request = fakeRequest().method(POST).uri("/tours");
         Result result = route(app, request);
         assertEquals(OK, result.status());
+        JsonNode json = Json.parse(contentAsString(result)).get("tours");
+        assertNotNull(json);
+        assertEquals(1, json.size());
+        json = json.get("tourtype");
+        assertEquals("Test", json.get("name").textValue());
     }
 }
