@@ -3,29 +3,43 @@
 
 # --- !Ups
 
-create table tours (
+create table prize (
   id                            bigint auto_increment not null,
-  tourtype_id                   integer not null,
-  constraint pk_tours primary key (id)
-);
-
-create table tour_types (
-  id                            integer auto_increment not null,
+  money                         integer not null,
+  xp                            integer not null,
+  type                          varchar(255) not null,
   name                          varchar(255) not null,
-  description                   varchar(255) not null,
-  constraint pk_tour_types primary key (id)
+  value                         integer not null,
+  constraint pk_prize primary key (id)
 );
 
-create index ix_tours_tourtype_id on tours (tourtype_id);
-alter table tours add constraint fk_tours_tourtype_id foreign key (tourtype_id) references tour_types (id) on delete restrict on update restrict;
+create table tournament (
+  id                            bigint auto_increment not null,
+  first_id                      bigint not null,
+  second_id                     bigint not null,
+  third_id                      bigint not null,
+  constraint uq_tournament_first_id unique (first_id),
+  constraint uq_tournament_second_id unique (second_id),
+  constraint uq_tournament_third_id unique (third_id),
+  constraint pk_tournament primary key (id)
+);
+
+alter table tournament add constraint fk_tournament_first_id foreign key (first_id) references prize (id) on delete restrict on update restrict;
+
+alter table tournament add constraint fk_tournament_second_id foreign key (second_id) references prize (id) on delete restrict on update restrict;
+
+alter table tournament add constraint fk_tournament_third_id foreign key (third_id) references prize (id) on delete restrict on update restrict;
 
 
 # --- !Downs
 
-alter table tours drop constraint if exists fk_tours_tourtype_id;
-drop index if exists ix_tours_tourtype_id;
+alter table tournament drop constraint if exists fk_tournament_first_id;
 
-drop table if exists tours;
+alter table tournament drop constraint if exists fk_tournament_second_id;
 
-drop table if exists tour_types;
+alter table tournament drop constraint if exists fk_tournament_third_id;
+
+drop table if exists prize;
+
+drop table if exists tournament;
 
