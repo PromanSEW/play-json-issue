@@ -25,10 +25,11 @@ public class RestControllerTest extends WithApplication {
         RequestBuilder request = fakeRequest().method(POST).uri("/tours");
         Result result = route(app, request);
         assertEquals(OK, result.status());
-        JsonNode json = Json.parse(contentAsString(result)).get("tours");
+        JsonNode json = Json.parse(contentAsString(result));
         assertNotNull(json);
         assertEquals(1, json.size());
-        json = json.get("tourtype");
+        json = json.get(0).get("tourtype");
+        assertNotNull(json);
         assertEquals("Test", json.get("name").textValue());
     }
 }
