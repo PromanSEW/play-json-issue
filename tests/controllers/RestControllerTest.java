@@ -5,7 +5,6 @@ import models.Prize;
 import models.Tournament;
 import org.junit.Test;
 import play.libs.Json;
-import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
 import play.test.WithApplication;
 
@@ -23,10 +22,15 @@ public class RestControllerTest extends WithApplication {
         tournament.second = second;
         tournament.third = third;
         tournament.save();
-        RequestBuilder request = fakeRequest().method(POST).uri("/tours");
-        Result result = route(app, request);
+        assertResult(route(app, fakeRequest().method(POST).uri("/ebean")));
+        assertResult(route(app, fakeRequest().method(POST).uri("/play")));
+    }
+
+    private static void assertResult(Result result) {
         assertEquals(OK, result.status());
-        JsonNode json = Json.parse(contentAsString(result));
+        String body = contentAsString(result);
+        System.out.println(body);
+        JsonNode json = Json.parse(body);
         assertNotNull(json);
         assertEquals(1, json.size());
         json = json.get(0).get("first");

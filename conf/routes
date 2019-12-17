@@ -1,1 +1,2 @@
-POST        /tours        controllers.RestController.tours()
+POST        /ebean        controllers.RestController.toursEbean()
+POST        /play         controllers.RestController.toursPlay()
